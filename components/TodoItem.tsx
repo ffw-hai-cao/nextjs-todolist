@@ -70,7 +70,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, desc, completed, onDelet
         <button onClick={handleDelete}>
           <FontAwesomeIcon className='fa-lg hover:text-[#3CDBB5]' icon={faTrash} />
         </button>
-        <Link href={`/${id}`} passHref>
+        <Link href={`/todo/${id}`} passHref>
           <FontAwesomeIcon className='fa-lg hover:text-[#3CDBB5]' icon={faEye} />
         </Link>
       </div>
