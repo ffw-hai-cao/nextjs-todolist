@@ -79,9 +79,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, desc, completed, onDelet
 };
 
 function getFirst10Words(text: string) {
-  const words = text.split(/\s+/);
-  if (words.length > 50) {
-      return words.slice(0, 10).join(' ') + '...';
+  let words = text.split(' ');
+  if (words.length > 10) {
+    return words.slice(0, 10).join(' ') + '...';
   }
   return text;
 }
