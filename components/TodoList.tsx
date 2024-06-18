@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Todo } from '../interfaces/Todo';
-import Popup from 'reactjs-popup';
 import TodoItem from './TodoItem';
-import Link from 'next/link';
+import TodoForm from './TodoForm';
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -16,14 +13,10 @@ const TodoList: React.FC = () => {
     }
   }, []);
 
-  const addTodo = () => {
-    if (newTodo.trim() !== '') {
-      const newItem = { id: Date.now(), text: newTodo, completed: false };
-      const newList = [...todos, newItem];
-      saveTodoList(newList);
-      setNewTodo('');
-      setIsOpen(false);
-    }
+  const addTodo = (title: string, desc: string) => {
+    const newItem = { id: Date.now(), title, desc, completed: false };
+    const newList = [...todos, newItem];
+    saveTodoList(newList);
   };
 
   const deleteTodo = (id: number) => {
@@ -31,8 +24,8 @@ const TodoList: React.FC = () => {
     saveTodoList(newList);
   };
 
-  const editTodo = (id: number, newText: string) => {
-    const newList = todos.map(todo => (todo.id === id ? { ...todo, text: newText } : todo));
+  const editTodo = (id: number, newTitle: string, newDesc: string) => {
+    const newList = todos.map(todo => (todo.id === id ? { ...todo, title: newTitle, desc: newDesc } : todo));
     saveTodoList(newList);
   };
 
@@ -47,41 +40,22 @@ const TodoList: React.FC = () => {
   }
 
   return (
-    <div>
-      <button onClick={() => setIsOpen(true)}>Add Todo</button>
-      <Popup open={isOpen} closeOnDocumentClick onClose={() => setIsOpen(false)}>
-        <div className="modal">
-          <a className="close" onClick={() => setIsOpen(false)}>
-            &times;
-          </a>
-          <div>
-            <input
-              type="text"
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') addTodo();
-              }}
-            />
-            <button onClick={addTodo}>Add Todo</button>
-          </div>
-        </div>
-      </Popup>
-      <>
-        {todos.map(todo => (
-          <div key={todo.id}>
-          <TodoItem
-            id={todo.id}
-            text={todo.text}
-            completed={todo.completed}
-            onDelete={deleteTodo}
-            onEdit={editTodo}
-            onToggle={toggleTodo}
-          />
-          <Link href={`/${todo.id}`} passHref>View Detail</Link>
-          </div>
-        ))}
-      </>
+    <div className="todo-list">
+      <TodoForm onAddTodo={addTodo} />
+      <div className="p-4 bg-[#ECEDF6] rounded-lg mt-4">
+      {todos.map(todo => (
+        <TodoItem
+          id={todo.id}
+          key={todo.id}
+          title={todo.title}
+          desc={todo.desc}
+          completed={todo.completed}
+          onDelete={deleteTodo}
+          onEdit={editTodo}
+          onToggle={toggleTodo}
+        />
+      ))}
+      </div>
     </div>
   );
 };

@@ -1,14 +1,16 @@
 export interface Todo {
   id: number;
-  text: string;
+  title: string;
+  desc: string;
   completed: boolean;
 }
 
-export interface TodoItemProps {
-  id: number;
-  text: string;
-  completed: boolean;
+export interface TodoFormProps {
+  onAddTodo: (title: string, des: string) => void;
+}
+
+export interface TodoItemProps extends Todo {
   onDelete: (id: number) => void;
-  onEdit: (id: number, newText: string) => void;
+  onEdit: (id: number, newTitle: string, newDesc: string) => void;
   onToggle: (id: number) => void;
 }
